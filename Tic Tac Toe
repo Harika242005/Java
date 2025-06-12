@@ -1,0 +1,86 @@
+import java.util.Scanner;
+
+public class TicTacToe {
+    static char[][] board = {
+        {' ', '|', ' ', '|', ' '},
+        {'-', '+', '-', '+', '-'},
+        {' ', '|', ' ', '|', ' '},
+        {'-', '+', '-', '+', '-'},
+        {' ', '|', ' ', '|', ' '}
+    };
+
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        char currentPlayer = 'X';
+        int moves = 0;
+
+        while (true) {
+            printBoard();
+            System.out.println("Player " + currentPlayer + ", enter your move (1-9):");
+            int pos = scan.nextInt();
+
+            if (placeMark(pos, currentPlayer)) {
+                moves++;
+                if (checkWinner(currentPlayer)) {
+                    printBoard();
+                    System.out.println("🎉 Player " + currentPlayer + " wins!");
+                    break;
+                } else if (moves == 9) {
+                    printBoard();
+                    System.out.println("😐 It's a draw!");
+                    break;
+                }
+                // Switch player
+                currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+            } else {
+                System.out.println("❌ Invalid move! Try again.");
+            }
+        }
+
+        scan.close();
+    }
+
+    public static void printBoard() {
+        for (char[] row : board) {
+            for (char c : row) {
+                System.out.print(c);
+            }
+            System.out.println();
+        }
+    }
+
+    public static boolean placeMark(int pos, char player) {
+        int row = 0, col = 0;
+        switch (pos) {
+            case 1: row = 0; col = 0; break;
+            case 2: row = 0; col = 2; break;
+            case 3: row = 0; col = 4; break;
+            case 4: row = 2; col = 0; break;
+            case 5: row = 2; col = 2; break;
+            case 6: row = 2; col = 4; break;
+            case 7: row = 4; col = 0; break;
+            case 8: row = 4; col = 2; break;
+            case 9: row = 4; col = 4; break;
+            default: return false;
+        }
+
+        if (board[row][col] == ' ') {
+            board[row][col] = player;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean checkWinner(char player) {
+        // Rows, Columns, and Diagonals check
+        return (board[0][0] == player && board[0][2] == player && board[0][4] == player) ||
+               (board[2][0] == player && board[2][2] == player && board[2][4] == player) ||
+               (board[4][0] == player && board[4][2] == player && board[4][4] == player) ||
+               (board[0][0] == player && board[2][0] == player && board[4][0] == player) ||
+               (board[0][2] == player && board[2][2] == player && board[4][2] == player) ||
+               (board[0][4] == player && board[2][4] == player && board[4][4] == player) ||
+               (board[0][0] == player && board[2][2] == player && board[4][4] == player) ||
+               (board[0][4] == player && board[2][2] == player && board[4][0] == player);
+    }
+}
